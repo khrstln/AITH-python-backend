@@ -11,6 +11,8 @@ uvicorn = "^0.30.6"
 fastapi = "^0.114.2"
 requests = "^2.32.3"
 
+[tool.flake8]
+max-line-length = 100
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.5"
