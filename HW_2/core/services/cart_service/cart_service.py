@@ -1,29 +1,68 @@
 from typing import Optional, List
 
-from entities.cart import Cart
-from interface.interface_cart_service import IntefaceCartService
+from HW_2.core.entities.cart import Cart
+from HW_2.core.services.interface.interface_cart_service import CartService
 from HW_2.core.repos.cart_repo.interface_cart_repo import InterfaceCartRepo
+from HW_2.core.repos.cart_repo.dto.post_cart_dto import PostCartDTO
+
+from HW_2.core.exceptions.base_error import NegativeValueError, \
+                                            NonPositiveValueError, \
+                                            MinMaxError
 
 
-class IntefaceCartService(IntefaceCartService):
-    # TO DO: написать реализацию всех методов
+class CartService(CartService):
     def __init__(self, cart_repo: InterfaceCartRepo) -> None:
         self._cart_repo = cart_repo
 
-    async def post_cart(self) -> id:
-        raise NotImplementedError
+    async def post_cart(self, post_cart_dto: PostCartDTO) -> id:
+        return await self._cart_repo.post_cart(post_cart_dto)
 
-    async def get_cart_by_id(self) -> Cart:
-        raise NotImplementedError
+    async def get_cart_by_id(self, cart_id: int) -> Cart:
+        # TO DO: добавить исключение для случая, когда cart_id
+        # не существует
+        return await self._cart_repo.get_cart_by_id(cart_id)
 
-    async def get_cart(self,
-                       offset: Optional[int],
-                       limit: Optional[int],
-                       min_price: Optional[float],
-                       max_price: Optional[float],
-                       min_quantity: Optional[int],
-                       max_quantity: Optional[int]) -> List[Cart]:
-        raise NotImplementedError
+    async def get_carts(self,
+                        offset: Optional[int] = 0,
+                        limit: Optional[int] = 10,
+                        min_price: Optional[float] = None,
+                        max_price: Optional[float] = None,
+                        min_quantity: Optional[int] = None,
+                        max_quantity: Optional[int] = None) -> List[Cart]:
+        if offset < 0:
+            raise NegativeValueError
+
+        if limit <= 0:
+            raise NonPositiveValueError
+
+        if min_price < 0:
+            raise NegativeValueError
+
+        if max_price < 0:
+            raise NegativeValueError
+
+        if min_price is not None and max_price is not None and \
+                min_price > max_price:
+            MinMaxError
+
+        if min_quantity < 0:
+            raise NegativeValueError
+
+        if max_quantity < 0:
+            raise NegativeValueError
+
+        if min_quantity is not None and max_quantity is not None and \
+                min_quantity > max_quantity:
+            MinMaxError
+
+        return await self._cart_repo.get_carts(offset,
+                                               limit,
+                                               min_price,
+                                               max_price,
+                                               min_quantity,
+                                               max_quantity)
 
     async def post_item_to_cart(self, item_id: int, cart_id: int) -> Cart:
-        raise NotImplementedError
+        # TO DO: добавить исключение для случая, когда cart_id
+        # или item_id не существует
+        return await self._cart_repo.post_item_to_cart(item_id, cart_id)

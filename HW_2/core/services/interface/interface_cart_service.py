@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Optional, List
 
-from entities.cart import Cart
+from HW_2.core.entities.cart import Cart
 
 
-class IntefaceCartService(ABC):
+class CartService(ABC):
     @abstractmethod
     async def post_cart(self) -> id:
         """Create a new cart"""

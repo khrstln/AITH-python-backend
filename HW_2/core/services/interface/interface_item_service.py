@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from entities.item import Item
+from HW_2.core.entities.item import Item
 from HW_2.core.repos.item_repo.dto.post_item_dto import PostItemDTO
 from HW_2.core.repos.item_repo.dto.patch_item_dto import PatchItemDTO
 from HW_2.core.repos.item_repo.dto.put_item_dto import PutItemDTO
@@ -9,7 +9,7 @@ from HW_2.core.repos.item_repo.dto.put_item_dto import PutItemDTO
 
 class InterfaceItemService(ABC):
     @abstractmethod
-    async def create_item(self, item_dto: PostItemDTO) -> Item:
+    async def post_item(self, item_dto: PostItemDTO) -> Item:
         """
         Creates a new item
 

@@ -1,11 +1,12 @@
 from typing import Optional, List
 
-from entities.item import Item
+from HW_2.core.entities.item import Item
 from HW_2.core.repos.item_repo.interface_item_repo import InterfaceItemRepo
 from HW_2.core.repos.item_repo.dto.post_item_dto import PostItemDTO
 from HW_2.core.repos.item_repo.dto.patch_item_dto import PatchItemDTO
 from HW_2.core.repos.item_repo.dto.put_item_dto import PutItemDTO
-from interface.interface_item_service import InterfaceItemService
+from HW_2.core.services.interface.interface_item_service \
+    import InterfaceItemService
 
 from HW_2.core.exceptions.base_error import NegativeValueError, \
                                             NonPositiveValueError, \
@@ -16,8 +17,8 @@ class ItemService(InterfaceItemService):
     def __init__(self, item_repo: InterfaceItemRepo):
         self._item_repo = item_repo
 
-    async def post_item(self, post_item_dto: PostItemDTO) -> Item:
-        return await self._item_repo.post_item(post_item_dto)
+    async def post_item(self, item_dto: PostItemDTO) -> Item:
+        return await self._item_repo.post_item(item_dto)
 
     async def get_item_by_id(self, item_id: int) -> Item:
         # TO DO: Добавить исключения для случая, когда item с item_id
