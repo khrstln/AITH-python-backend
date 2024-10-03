@@ -1,28 +1,29 @@
-from typing import Annotated, Optional
+from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query
 from starlette.responses import JSONResponse
 
-from HW_2.infrastructure.api.dependencies import cart_service
 from HW_2.core.repos.cart_repo.dto.post_cart_dto import PostCartDTO
 from HW_2.core.services.cart_service.cart_service import CartService
+from HW_2.infrastructure.data.repos.cart_repo.cart_repo import CartRepo
 
 router = APIRouter(
     prefix="/cart",
     tags=["Cart"],
 )
 
+cart_service = CartService(CartRepo())
+
 
 @router.post("")
 async def post_cart(
-    post_cart_dto: PostCartDTO,
-    cart_service: Annotated[CartService, Depends(cart_service)],
+    cart_dto: PostCartDTO
 ):
     try:
-        cart_id = await cart_service.post_cart(post_cart_dto)
+        cart = await cart_service.post_cart()
         return JSONResponse(
-            content={"id": cart_id},
-            headers={"location": f"/cart/{cart_id}"},
+            content={"id": cart},
+            headers={"location": f"/cart/{cart}"},
             status_code=201,
         )
     except ValueError as e:  # TO DO: Написать исключения в случае отсутствия
@@ -32,8 +33,7 @@ async def post_cart(
 
 @router.get("/{id}")
 async def get_cart_by_id(
-    id: int,
-    cart_service: Annotated[CartService, Depends(cart_service)],
+    id: int
 ):
     try:
         cart = await cart_service.get_cart_by_id(id)
@@ -45,7 +45,6 @@ async def get_cart_by_id(
 
 @router.get("")
 async def get_carts(
-    cart_service: Annotated[CartService, Depends(cart_service)],
     offset: int = Query(0, ge=0, description="Non-negative integer, offset."),
     limit: int = Query(10, gt=0, description="Positive integer, maxial number \
                        of carts."),
@@ -75,8 +74,7 @@ async def get_carts(
 @router.post("/{cart_id}/add/{item_id}")
 async def add_item_to_cart(
     cart_id: int,
-    item_id: int,
-    cart_service: Annotated[CartService, Depends(cart_service)],
+    item_id: int
 ):
     try:
         cart = await cart_service.post_item_to_cart(cart_id, item_id)

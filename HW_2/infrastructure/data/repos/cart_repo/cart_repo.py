@@ -1,7 +1,6 @@
 from typing import Optional, List
 
 from HW_2.core.repos.cart_repo.interface_cart_repo import InterfaceCartRepo
-from HW_2.core.repos.cart_repo.dto.post_cart_dto import PostCartDTO
 from HW_2.core.entities.cart import Cart
 from HW_2.core.entities.item import Item
 
@@ -10,9 +9,9 @@ class CartRepo(InterfaceCartRepo):
     def __init__(self) -> None:
         self._carts = []
 
-    async def post_cart(self, cart_dto: PostCartDTO) -> int:
+    async def post_cart(self) -> int:
         cart = Cart(id=len(self._carts), items=[], price=0.0)
-        self._carts.append(Cart)
+        self._carts.append(cart)
 
         return cart.id
 
@@ -30,7 +29,11 @@ class CartRepo(InterfaceCartRepo):
                         max_price: Optional[float] = None,
                         min_quantity: Optional[int] = None,
                         max_quantity: Optional[int] = None) -> List[Cart]:
-        carts = self._carts[offset:offset + limit]
+        try:
+            carts = self._carts[offset:offset + \
+                                min(limit, len(self._carts) - offset)]
+        except IndexError:
+            return None
 
         if min_price is not None:
             carts = [cart for cart in carts if cart.price >= min_price]

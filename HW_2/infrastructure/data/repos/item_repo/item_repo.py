@@ -31,7 +31,11 @@ class ItemRepo(InterfaceItemRepo):
                         min_price: Optional[float] = None,
                         max_price: Optional[float] = None,
                         show_deleted: Optional[bool] = False) -> List[Item]:
-        items = self._items[offset:offset + limit]
+
+        try:
+            items = self._items[offset:offset + min(limit, len(self._items) - offset)]
+        except IndexError:
+            return None
 
         if not show_deleted:
             items = [item for item in items if not item.deleted]
@@ -49,12 +53,10 @@ class ItemRepo(InterfaceItemRepo):
         try:
             replaced_item = self._items[item_id]
         except IndexError:
-            return None
+            raise ValueError("Wrong item_id!")
 
-        replaced_item.name = item_dto.name
-        replaced_item.price = item_dto.price
-
-        self._items[item_id] = replaced_item
+        self._items[item_id].name = item_dto.name
+        self._items[item_id].price = item_dto.price
 
         return replaced_item
 
