@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 from typing import List
 
-from entities.item import Item
+from HW_2.core.entities.item import Item
 
 
-class PostItemToCartDTO(BaseModel):
+class PostCartDTO(BaseModel):
     name: str
     items: List[Item]
-    price: str
+    price: float
