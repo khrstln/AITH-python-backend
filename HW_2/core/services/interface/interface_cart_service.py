@@ -4,7 +4,7 @@ from typing import Optional, List
 from HW_2.core.entities.cart import Cart
 
 
-class CartService(ABC):
+class InterfaceCartService(ABC):
     @abstractmethod
     async def post_cart(self) -> id:
         """Create a new cart"""
@@ -14,13 +14,13 @@ class CartService(ABC):
         """Returns a cart by its id"""
 
     @abstractmethod
-    async def get_cart(self,
-                       offset: Optional[int],
-                       limit: Optional[int],
-                       min_price: Optional[float],
-                       max_price: Optional[float],
-                       min_quantity: Optional[int],
-                       max_quantity: Optional[int]) -> List[Cart]:
+    async def get_carts(self,
+                        offset: Optional[int],
+                        limit: Optional[int],
+                        min_price: Optional[float],
+                        max_price: Optional[float],
+                        min_quantity: Optional[int],
+                        max_quantity: Optional[int]) -> List[Cart]:
         """Returns a list of carts using filters"""
 
     @abstractmethod

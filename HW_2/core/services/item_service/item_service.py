@@ -1,7 +1,7 @@
 from typing import Optional, List
 
 from HW_2.core.entities.item import Item
-from HW_2.core.repos.item_repo.interface_item_repo import InterfaceItemRepo
+from HW_2.infrastructure.data.repos.item_repo.item_repo import ItemRepo
 from HW_2.core.repos.item_repo.dto.post_item_dto import PostItemDTO
 from HW_2.core.repos.item_repo.dto.patch_item_dto import PatchItemDTO
 from HW_2.core.repos.item_repo.dto.put_item_dto import PutItemDTO
@@ -14,7 +14,7 @@ from HW_2.core.exceptions.base_error import NegativeValueError, \
 
 
 class ItemService(InterfaceItemService):
-    def __init__(self, item_repo: InterfaceItemRepo):
+    def __init__(self, item_repo: ItemRepo):
         self._item_repo = item_repo
 
     async def post_item(self, item_dto: PostItemDTO) -> Item:
@@ -37,10 +37,10 @@ class ItemService(InterfaceItemService):
         if limit <= 0:
             raise NonPositiveValueError
 
-        if min_price < 0:
+        if min_price is not None and min_price < 0:
             raise NegativeValueError
 
-        if max_price < 0:
+        if max_price is not None and max_price < 0:
             raise NegativeValueError
 
         if min_price is not None and max_price is not None and \
@@ -53,16 +53,16 @@ class ItemService(InterfaceItemService):
                                                max_price,
                                                show_deleted)
 
-    async def put_item(self, item_id: int, put_item_dto: PutItemDTO) -> Item:
+    async def put_item(self, item_id: int, item_dto: PutItemDTO) -> Item:
         # TO DO: Добавить исключения для случая, когда item с item_id
         # не существует
-        return await self._item_repo.put_item(item_id, put_item_dto)
+        return await self._item_repo.put_item(item_id, item_dto)
 
     async def patch_item(self, item_id: int,
-                         put_item_dto: PatchItemDTO) -> Item:
+                         item_dto: PatchItemDTO) -> Item:
         # TO DO: Добавить исключения для случая, когда item с item_id
         # не существует
-        return await self._item_repo.patch_item(item_id, put_item_dto)
+        return await self._item_repo.patch_item(item_id, item_dto)
 
     async def delete_item(self, item_id: int) -> Item:
         # TO DO: Добавить исключения для случая, когда item с item_id
