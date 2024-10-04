@@ -3,12 +3,12 @@ from typing import Optional, List
 from HW_2.cart.repos.interface.interface_cart_repo import InterfaceCartRepo
 from HW_2.cart.entities.cart import Cart
 from HW_2.item.entities.item import Item
-from HW_2.infrastructure.data.mappers.item_mapper import ItemMapper
+from HW_2.item.mappers.item_mapper import ItemMapper
 
 
 class CartRepo(InterfaceCartRepo):
     def __init__(self) -> None:
-        self._carts = []
+        self._carts: List[Cart] = []
 
     def post_cart(self) -> int:
         cart = Cart(id=len(self._carts), items=[], price=0.0)
@@ -25,8 +25,8 @@ class CartRepo(InterfaceCartRepo):
 
     def get_carts(
         self,
-        offset: Optional[int] = 0,
-        limit: Optional[int] = 10,
+        offset: int = 0,
+        limit: int = 10,
         min_price: Optional[float] = None,
         max_price: Optional[float] = None,
         min_quantity: Optional[int] = None,
@@ -35,7 +35,7 @@ class CartRepo(InterfaceCartRepo):
         try:
             carts = self._carts[offset : offset + min(limit, len(self._carts) - offset)]  # noqa E203
         except IndexError:
-            return None
+            return []
 
         if min_price is not None:
             carts = [cart for cart in carts if cart.price >= min_price]

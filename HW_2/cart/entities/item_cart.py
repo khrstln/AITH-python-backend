@@ -14,5 +14,7 @@ class ItemCart(BaseModel):
         else:
             raise ValueError
 
-    def __eq__(self, other: "ItemCart") -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ItemCart):
+            return NotImplemented
         return self.id == other.id

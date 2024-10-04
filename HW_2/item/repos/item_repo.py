@@ -9,9 +9,9 @@ from HW_2.item.entities.item import Item
 
 class ItemRepo(InterfaceItemRepo):
     def __init__(self) -> None:
-        self._items = []
+        self._items: List[Item] = []
 
-    def post_item(self, item_dto: PostItemDTO) -> Optional[Item]:
+    def post_item(self, item_dto: PostItemDTO) -> Item:
         item = Item(id=len(self._items), name=item_dto.name, price=item_dto.price, deleted=False)
         self._items.append(item)
 
@@ -27,8 +27,8 @@ class ItemRepo(InterfaceItemRepo):
 
     def get_items(
         self,
-        offset: Optional[int] = 0,
-        limit: Optional[int] = 10,
+        offset: int = 0,
+        limit: int = 10,
         min_price: Optional[float] = None,
         max_price: Optional[float] = None,
         show_deleted: Optional[bool] = False,
@@ -37,7 +37,7 @@ class ItemRepo(InterfaceItemRepo):
         try:
             items = self._items[offset : offset + min(limit, len(self._items) - offset)]  # noqa E203
         except IndexError:
-            return None
+            return []
 
         if not show_deleted:
             items = [item for item in items if not item.deleted]
@@ -50,18 +50,21 @@ class ItemRepo(InterfaceItemRepo):
 
         return items
 
-    def put_item(self, item_id: int, item_dto: PutItemDTO) -> Optional[Item]:
+    def put_item(self, item_id: int, item_dto: PutItemDTO) -> Item:
         try:
             replaced_item = self._items[item_id]
         except IndexError:
             raise ValueError("Wrong item_id!")
 
-        self._items[item_id].name = item_dto.name
-        self._items[item_id].price = item_dto.price
+        if isinstance(item_dto.name, str):
+            self._items[item_id].name = item_dto.name
+
+        if isinstance(item_dto.price, float):
+            self._items[item_id].price = item_dto.price
 
         return replaced_item
 
-    def patch_item(self, item_id: int, item_dto: PatchItemDTO) -> Item:
+    def patch_item(self, item_id: int, item_dto: PatchItemDTO) -> Optional[Item]:
         try:
             updated_item = self._items[item_id]
         except IndexError:
@@ -77,7 +80,7 @@ class ItemRepo(InterfaceItemRepo):
 
         return updated_item
 
-    def delete_item(self, item_id: int) -> Item:
+    def delete_item(self, item_id: int) -> Optional[Item]:
         try:
             deleted_item = self._items[item_id]
         except IndexError:

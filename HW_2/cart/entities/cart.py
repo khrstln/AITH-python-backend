@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import List
-from HW_2.item_cart.entities.item_cart import ItemCart
+from HW_2.cart.entities.item_cart import ItemCart
 
 
 class Cart(BaseModel):

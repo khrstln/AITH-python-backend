@@ -8,8 +8,8 @@ from HW_2.item.repos.dto.put_item_dto import PutItemDTO
 from HW_2.item.repos.dto.patch_item_dto import PatchItemDTO
 from HW_2.cart.services.cart_service import CartService
 from HW_2.item.services.item_service import ItemService
-from HW_2.infrastructure.data.repos.cart_repo.cart_repo import CartRepo
-from HW_2.infrastructure.data.repos.item_repo.item_repo import ItemRepo
+from HW_2.cart.repos.cart_repo import CartRepo
+from HW_2.item.repos.item_repo import ItemRepo
 
 app = FastAPI(title="Shop API", swagger_ui_parameters={"defaultModelsExpandDepth": -1})
 
@@ -43,6 +43,8 @@ async def post_cart():
 async def get_cart_by_id(id: int):
     try:
         cart = cart_service.get_cart_by_id(id)
+        if cart is None:
+            raise HTTPException(status_code=404)
         return cart.model_dump()
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
@@ -95,6 +97,8 @@ async def get_carts(
 async def add_item_to_cart(cart_id: int, item_id: int):
     try:
         cart = cart_service.post_item_to_cart(item_id, cart_id)
+        if cart is None:
+            raise HTTPException(status_code=400)
         return cart.model_dump()
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e

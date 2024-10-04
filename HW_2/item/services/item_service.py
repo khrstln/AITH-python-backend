@@ -7,7 +7,7 @@ from HW_2.item.repos.dto.put_item_dto import PutItemDTO
 from HW_2.item.repos.dto.patch_item_dto import PatchItemDTO
 from HW_2.item.services.interface.interface_item_service import InterfaceItemService
 
-from HW_2.exceptions.base_error import NegativeValueError, NonPositiveValueError, MinMaxError
+from HW_2.common.exceptions.base_error import NegativeValueError, NonPositiveValueError, MinMaxError
 
 
 class ItemService(InterfaceItemService):
@@ -30,8 +30,8 @@ class ItemService(InterfaceItemService):
 
     def get_items(
         self,
-        offset: Optional[int] = 0,
-        limit: Optional[int] = 10,
+        offset: int = 0,
+        limit: int = 10,
         min_price: Optional[float] = None,
         max_price: Optional[float] = None,
         show_deleted: Optional[bool] = False,

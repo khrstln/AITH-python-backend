@@ -1,5 +1,5 @@
 from HW_2.item.entities.item import Item
-from HW_2.item_cart.entities.item_cart import ItemCart
+from HW_2.cart.entities.item_cart import ItemCart
 
 
 class ItemMapper:
