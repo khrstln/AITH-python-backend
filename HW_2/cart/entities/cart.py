@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from typing import List
-from HW_2.core.entities.item import Item
+from HW_2.item_cart.entities.item_cart import ItemCart
 
 
 class Cart(BaseModel):
     id: int
-    items: List[Item] | None
+    items: List[ItemCart]
     price: float

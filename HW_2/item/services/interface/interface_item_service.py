@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from HW_2.core.entities.item import Item
-from HW_2.core.repos.item_repo.dto.post_item_dto import PostItemDTO
-from HW_2.core.repos.item_repo.dto.patch_item_dto import PatchItemDTO
-from HW_2.core.repos.item_repo.dto.put_item_dto import PutItemDTO
+from HW_2.item.entities.item import Item
+from HW_2.item.repos.dto.post_item_dto import PostItemDTO
+from HW_2.item.repos.dto.put_item_dto import PutItemDTO
+from HW_2.item.repos.dto.patch_item_dto import PatchItemDTO
 
 
 class InterfaceItemService(ABC):
     @abstractmethod
-    async def post_item(self, item_dto: PostItemDTO) -> Item:
+    def post_item(self, item_dto: PostItemDTO) -> Item:
         """
         Creates a new item
 
@@ -21,7 +21,7 @@ class InterfaceItemService(ABC):
         """
 
     @abstractmethod
-    async def get_item_by_id(self, item_id: int) -> Item:
+    def get_item_by_id(self, item_id: int) -> Item:
         """
         Returns an item by its id
 
@@ -33,7 +33,7 @@ class InterfaceItemService(ABC):
         """
 
     @abstractmethod
-    async def get_items(
+    def get_items(
         self,
         offset: int = 0,
         limit: int = 10,
@@ -57,7 +57,7 @@ class InterfaceItemService(ABC):
         """
 
     @abstractmethod
-    async def put_item(self, item_id: int, put_item_dto: PutItemDTO) -> Item:
+    def put_item(self, item_id: int, put_item_dto: PutItemDTO) -> Item:
         """
         Replace an item by its id
 
@@ -70,8 +70,7 @@ class InterfaceItemService(ABC):
         """
 
     @abstractmethod
-    async def patch_item(self, item_id: int,
-                         patch_item_dto: PatchItemDTO) -> Item:
+    def patch_item(self, item_id: int, patch_item_dto: PatchItemDTO) -> Item:
         """
         Updates an item
 
@@ -85,7 +84,7 @@ class InterfaceItemService(ABC):
         """
 
     @abstractmethod
-    async def delete_item(self, item_id: int) -> Item:
+    def delete_item(self, item_id: int) -> Item:
         """
         Deletes an item
 

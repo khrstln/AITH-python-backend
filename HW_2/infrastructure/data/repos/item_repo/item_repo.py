@@ -1,39 +1,41 @@
 from typing import Optional, List
 
-from HW_2.core.repos.item_repo.interface_item_repo import InterfaceItemRepo
-from HW_2.core.repos.item_repo.dto.post_item_dto import PostItemDTO
-from HW_2.core.repos.item_repo.dto.put_item_dto import PutItemDTO
-from HW_2.core.repos.item_repo.dto.patch_item_dto import PatchItemDTO
-from HW_2.core.entities.item import Item
+from HW_2.item.repos.interface.interface_item_repo import InterfaceItemRepo
+from HW_2.item.repos.dto.post_item_dto import PostItemDTO
+from HW_2.item.repos.dto.put_item_dto import PutItemDTO
+from HW_2.item.repos.dto.patch_item_dto import PatchItemDTO
+from HW_2.item.entities.item import Item
 
 
 class ItemRepo(InterfaceItemRepo):
     def __init__(self) -> None:
         self._items = []
 
-    async def post_item(self, item_dto: PostItemDTO) -> Optional[Item]:
-        item = Item(id=len(self._items), name=item_dto.name,
-                    price=item_dto.price, deleted=False)
+    def post_item(self, item_dto: PostItemDTO) -> Optional[Item]:
+        item = Item(id=len(self._items), name=item_dto.name, price=item_dto.price, deleted=False)
         self._items.append(item)
 
         return item
 
-    async def get_item_by_id(self, id: int) -> Optional[Item]:
+    def get_item_by_id(self, id: int) -> Optional[Item]:
         try:
             item = self._items[id]
-            return item
         except IndexError:
             return None
 
-    async def get_items(self,
-                        offset: Optional[int] = 0,
-                        limit: Optional[int] = 10,
-                        min_price: Optional[float] = None,
-                        max_price: Optional[float] = None,
-                        show_deleted: Optional[bool] = False) -> List[Item]:
+        return item
+
+    def get_items(
+        self,
+        offset: Optional[int] = 0,
+        limit: Optional[int] = 10,
+        min_price: Optional[float] = None,
+        max_price: Optional[float] = None,
+        show_deleted: Optional[bool] = False,
+    ) -> List[Item]:
 
         try:
-            items = self._items[offset:offset + min(limit, len(self._items) - offset)]
+            items = self._items[offset : offset + min(limit, len(self._items) - offset)]  # noqa E203
         except IndexError:
             return None
 
@@ -48,8 +50,7 @@ class ItemRepo(InterfaceItemRepo):
 
         return items
 
-    async def put_item(self, item_id: int,
-                       item_dto: PutItemDTO) -> Optional[Item]:
+    def put_item(self, item_id: int, item_dto: PutItemDTO) -> Optional[Item]:
         try:
             replaced_item = self._items[item_id]
         except IndexError:
@@ -60,7 +61,7 @@ class ItemRepo(InterfaceItemRepo):
 
         return replaced_item
 
-    async def patch_item(self, item_id: int, item_dto: PatchItemDTO) -> Item:
+    def patch_item(self, item_id: int, item_dto: PatchItemDTO) -> Item:
         try:
             updated_item = self._items[item_id]
         except IndexError:
@@ -76,7 +77,7 @@ class ItemRepo(InterfaceItemRepo):
 
         return updated_item
 
-    async def delete_item(self, item_id: int) -> Item:
+    def delete_item(self, item_id: int) -> Item:
         try:
             deleted_item = self._items[item_id]
         except IndexError:

@@ -17,8 +17,6 @@ class CartService(InterfaceCartService):
         return self._cart_repo.post_cart()
 
     def get_cart_by_id(self, cart_id: int) -> Cart:
-        # TO DO: добавить исключение для случая, когда cart_id
-        # не существует
         return self._cart_repo.get_cart_by_id(cart_id)
 
     def get_carts(
@@ -57,8 +55,6 @@ class CartService(InterfaceCartService):
         return self._cart_repo.get_carts(offset, limit, min_price, max_price, min_quantity, max_quantity)
 
     def post_item_to_cart(self, item_id: int, cart_id: int) -> Cart:
-        # TODO: добавить исключение для случая, когда cart_id
-        # или item_id не существует
         item = self._item_repo.get_item_by_id(item_id)
 
         return self._cart_repo.post_item_to_cart(item, cart_id)
