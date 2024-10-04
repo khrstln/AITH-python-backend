@@ -1,18 +1,17 @@
 [tool.poetry]
-name = "AITH-python-backend"
+name = "HW_2"
 version = "0.1.0"
 description = ""
 authors = ["Ilya Katun <katun.ilya@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 uvicorn = "^0.30.6"
 fastapi = "^0.114.2"
 requests = "^2.32.3"
-
-[tool.flake8]
-max-line-length = 100
+faker = "^30.1.0"
+httpx = "^0.27.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.5"
