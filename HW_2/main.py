@@ -1,6 +1,6 @@
 from typing import Optional
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from starlette.middleware.cors import CORSMiddleware
 
 from HW_2.item.repos.dto.post_item_dto import PostItemDTO
@@ -24,6 +24,11 @@ app.add_middleware(
 item_repo = ItemRepo()
 item_service = ItemService(item_repo)
 cart_service = CartService(CartRepo(), item_repo)
+
+
+@app.get("/", include_in_schema=False)
+async def docs_redirect():
+    return RedirectResponse(url="/docs")
 
 
 @app.post("/cart")
