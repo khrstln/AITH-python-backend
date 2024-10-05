@@ -11,5 +11,4 @@
 ## HW 3
 
 **Дашборды**
-![dashboard](docs/avg_request_time.png)
-![dashboard](docs/errors.png)
+![dashboard](docs/dashboards.png)
