@@ -50,6 +50,11 @@ item_service = ItemService(item_repo)
 cart_service = CartService(CartRepo(), item_repo)
 
 
+@app.get("/", include_in_schema=False)
+async def docs_redirect():
+    return RedirectResponse(url="/docs")
+
+
 @app.post("/cart")
 async def post_cart():
     try:
