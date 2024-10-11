@@ -1,6 +1,8 @@
 from typing import Optional
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.responses import JSONResponse
+from prometheus_client import Counter, Histogram
+from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.middleware.cors import CORSMiddleware
 
 from HW_2.item.repos.dto.post_item_dto import PostItemDTO
@@ -20,6 +22,28 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+REQUEST_COUNT = Counter("app_requests_total", "Total number of requests")
+REQUEST_DURATION = Histogram("app_request_duration_seconds", "Duration of requests in seconds")
+ERROR_COUNT = Counter("app_errors_total", "Total number of errors")
+
+
+@app.middleware("http")
+async def add_prometheus_metrics(request: Request, call_next):
+    REQUEST_COUNT.inc()
+    with REQUEST_DURATION.time():
+        try:
+            response = await call_next(request)
+            if response.status_code >= 400:
+                ERROR_COUNT.inc()
+            return response
+        except Exception as e:
+            ERROR_COUNT.inc()
+            raise e
+
+
+Instrumentator().instrument(app).expose(app)
+
 
 item_repo = ItemRepo()
 item_service = ItemService(item_repo)
