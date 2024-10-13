@@ -1,7 +1,6 @@
 services:
-  fastapi-app:
-    image: fastapi-app
-    container_name: fastapi-app
+  demo-service:
+    container_name: demo-service
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,6 +16,10 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - demo-service
     networks:
       - monitoring
 
@@ -25,17 +28,19 @@ services:
     container_name: grafana
     ports:
       - "3000:3000"
-    volumes:
-      - ./grafana-data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
     networks:
       - monitoring
 
 networks:
   monitoring:
-    driver: bridge
+    driver: monitoring
 
-volumes:
-  grafana-data:
+# volumes:
+#   grafana-data:
