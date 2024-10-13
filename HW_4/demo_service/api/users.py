@@ -43,7 +43,7 @@ async def get_user(
     if id is not None and (author.uid == id or author.info.role == UserRole.ADMIN):
         entity = user_service.get_by_id(id)
     elif author.info.username == username or author.info.role == UserRole.ADMIN:
-        entity = user_service.get_by_username(username)
+        entity = user_service.get_by_username(username)  # type: ignore
 
     if entity is None:
         raise HTTPException(HTTPStatus.NOT_FOUND)

@@ -30,7 +30,7 @@ async def initialize(app: FastAPI):
             name="admin",
             birthdate=datetime.fromtimestamp(0.0),
             role=UserRole.ADMIN,
-            password="superSecretAdminPassword123",
+            password="superSecretAdminPassword123",  # type: ignore
         )
     )
 

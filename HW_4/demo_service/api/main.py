@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from prometheus_fastapi_instrumentator import Instrumentator
 from HW_4.demo_service.api import users, utils
 
 
@@ -16,3 +16,4 @@ def create_app():
 
 
 app = create_app()
+Instrumentator().instrument(app).expose(app)
